@@ -1,0 +1,16 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - feature/*
+jobs:
+  build:
+    name: python
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
