@@ -1,0 +1,77 @@
+# IDEs
+.vscode/
+.idea/
+
+# python
+_local-cache/
+target/
+*.pyc
+*.pyo
+**/__pycache__
+dist/
+./build/
+*.egg
+**/*.egg-info
+.pytest_cache/
+
+# virtual envs
+.venv
+
+# OS
+.DS_Store
+
+# environment
+.env
+
+# python tools
+.pybuilder/
+.tox/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+coverage_html
+pytest_results.xml
+pytest_results.html
+
+# terraform
+.terraform
+.terraform.lock.hcl
+
+.git
+.gitignore
+.dockerignore
+
+.github
+
+README.md
+
+Makefile
+
+deploy
+docker-compose.yaml
+
+# tests
+tests
+
+# Jupyter notebooks
+notebooks
+
+# mlflow
+mlruns
+mlartifacts
