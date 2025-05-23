@@ -1,0 +1,119 @@
+default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [pre-commit]
+repos:
+  # basic checks and text formatting
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=8192"]
+      - id: check-toml
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: no-commit-to-branch
+        # only the following branches are allowed: `master`, `develop`, `feature/description-with-dashes`,
+        # `hotfix/description-with-dashes`, `bugfix/description-with-dashes`
+        # --branch is there because by default in this hook commits are prohibited to `master` so we override that
+        args:
+          [
+            "--pattern",
+            '^(?!((master$|develop$)|((feature|hotfix|bugfix)\/[a-zA-Z0-9\-\.]+$))).*',
+            "--branch",
+            "",
+          ]
+      - id: trailing-whitespace
+        exclude: "data"
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+  # detect secrets that should not be committed
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        exclude: "data,.venv"
+  # remove tabs and replace them with spaces
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+    hooks:
+      - id: remove-tabs
+  # check commit message
+  - repo: https://github.com/dtaivpp/commit-msg-regex-hook
+    rev: v0.2.2
+    hooks:
+      - id: commit-msg-regex-hook
+        args: [
+            # the commit message should start with a lowercase character
+            "--pattern='[a-z].*'",
+            "--failure_message='Commits should start with a lowercase character'",
+          ]
+        stages: [commit-msg]
+        always_run: true
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.7.7
+    hooks:
+      - id: uv-lock
+  # finding unused code or variables
+  - repo: https://github.com/jendrikseipp/vulture
+    rev: v2.14
+    hooks:
+      - id: vulture
+        pass_filenames: true
+
+  # consistent formatting for the pydocs
+  - repo: https://github.com/PyCQA/docformatter
+    rev: v1.7.7
+    hooks:
+      - id: docformatter
+        additional_dependencies: [tomli]
+  # format markdown files
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.22
+    hooks:
+      - id: mdformat
+        additional_dependencies: ["mdformat-black", "mdformat-toc"]
+  # terraform formatting and validation
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.99.0
+    hooks:
+      - id: terraform_validate
+        pass_filenames: false
+      - id: terraform_tflint
+        args:
+          # disable annoying rule that require each submodule to have its own terraform provider and version
+          - --args=--disable-rule=terraform_required_providers
+          - --args=--disable-rule=terraform_required_version
+      - id: terraform_fmt
+        args:
+          - --args=-recursive
+      - id: terraform_trivy
+        args:
+          - --args=--ignorefile=__GIT_WORKING_DIR__/deploy/terraform/.trivyignore
+  # yaml linting
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.37.1
+    hooks:
+      - id: yamllint
+        args: ["-d", "{extends: relaxed, rules: {line-length: {max: 140}}}"]
+  # discover common spelling mistakes
+  - repo: https://github.com/codespell-project/codespell
+    rev: "v2.4.1"
+    hooks:
+      - id: codespell
+        additional_dependencies: [tomli]
+        # repeated here since it's not picked up from pyproject.toml when runnning pre-commit explicitly
+        # rather than from git
+        args:
+          [
+            "--skip",
+            "notebooks/*.ipynb,data,coverage_html,pytest_results.html,pytest_allure",
+            "--ignore-regex",
+            ".*#\\snoqa$",
+          ]
+  # linting and formatting using ruff
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.11
+    hooks:
+      - id: ruff
+      - id: ruff-format
