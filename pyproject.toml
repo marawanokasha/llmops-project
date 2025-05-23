@@ -1,0 +1,68 @@
+[project]
+name = "llmops-project"
+authors=[{name="Marawan Shalaby", email="marawanokasha@hotmail.com"}]
+description="Example project for LLMOps covering all the steps from experimentation to deployment"
+version = "0.1.0"
+
+requires-python = ">=3.13"
+dependencies = [
+    "pandas>=2.2.3",
+    # dev
+    "structlog>=25.3.0",
+    "dynaconf>=3.2.11",
+    # webapp
+    "streamlit>=1.45.1",
+    # api
+    "fastapi[standard]>=0.115.12",
+    "fastapi-utils>=0.8.0",
+    # ml
+    "openai>=1.82.0",
+    "scikit-learn>=1.6.1",
+    "mlflow>=3.0.0",
+    "dotenv>=0.9.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pylint",
+    "ipykernel",
+    "tqdm>=4.67.1",
+    "pytest>=8.4.0",
+]
+
+[tool.ruff]
+fix = true
+show-fixes = true
+output-format = "full"
+line-length = 140
+
+
+[tool.vulture]
+min_confidence = 80
+paths = ["src", "tests"]
+# ignore pytest fixtures that have side effects (ex. patching) and cls variable used in class methods
+ignore_names = ["mock*", "setup*", "cls"]
+sort_by_size = true
+verbose = true
+
+
+[tool.docformatter]
+in-place = true
+make-summary-multi-line = true
+close-quotes-on-newline = true
+pre-summary-newline = true
+wrap-summaries = 140
+wrap-descriptions = 160
+
+
+[tool.codespell]
+skip = [
+    "notebooks",
+    "coverage_html",
+    "pytest_results.html",
+    "pytest_allure",
+    "data/*",
+    "uv.lock",
+    "*.egg-info",
+]
