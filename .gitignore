@@ -1,0 +1,58 @@
+# IDEs
+.vscode/
+.idea/
+
+# python
+_local-cache/
+target/
+*.pyc
+*.pyo
+**/__pycache__
+dist/
+./build/
+*.egg
+*.egg-info/
+
+# virtual envs
+.venv
+
+# OS
+.DS_Store
+
+# environment
+.env
+
+# python tools
+.tox/
+.cache/
+.mypy_cache/
+.ruff_cache/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*.cover
+*.py,cover
+.pytest_cache/
+cover/
+coverage_html
+pytest_results.xml
+pytest_results.html
+pytest_allure
+
+# terraform
+.terraform
+.terraform.lock.hcl
+deploy/terraform/terraform.plan
+deploy/terraform/terraform.tfstate
+
+data
+
+# mlflow
+mlruns
+mlartifacts

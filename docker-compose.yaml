@@ -1,0 +1,31 @@
+services:
+  webapp:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./deploy/docker/Dockerfile
+    ports:
+      - "127.0.0.1:8501:8501"
+    env_file: .env
+    command: ["uv", "run", "streamlit", "run", "src/webapp.py"]
+  api:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./deploy/docker/Dockerfile
+    command: ["uv", "run", "fastapi", "run", "src/api.py"]
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file: .env
+    volumes:
+      - type: bind
+        source: ~/.aws
+        target: /opt/app/.aws
+  mlflow:
+    platform: linux/amd64
+    ports:
+      - "127.0.0.1:8080:8080"
+    build:
+      context: .
+      dockerfile: ./deploy/docker/Dockerfile
+    command: ["uv", "run", "mlflow", "server", "--host", "0.0.0.0", "--port", "8080"]
